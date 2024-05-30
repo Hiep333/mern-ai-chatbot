@@ -6,7 +6,6 @@ import {toast} from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 
 
-
 const Login = () => {
     const auth = useAuth()
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
