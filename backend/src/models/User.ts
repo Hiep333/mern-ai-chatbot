@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { randomUUID } from "crypto";
 
+// Define chat schema
 const chatSchema = new mongoose.Schema({
   id: {
     type: "string",
@@ -16,6 +17,7 @@ const chatSchema = new mongoose.Schema({
   }
 });
 
+// Define user schema
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -30,7 +32,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  chats: [chatSchema],
+  chats: [chatSchema]// Embedding chat schema in user schema
 });
 
 export default mongoose.model("User",userSchema);

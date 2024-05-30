@@ -1,30 +1,30 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Box, Avatar, Typography, Button, IconButton, } from "@mui/material";
 import red from "@mui/material/colors/red";
 import { useAuth } from '../context/AuthContext';
 import ChatItem from '../components/chat/ChatItem';
 import { IoMdSend } from "react-icons/io";
+import { sendChatRequest } from '../helpers/api-communicator';
 
-const chatMessages = [
-    { role: "assistant", content: "Hello! How can I assist you today?" },
-    { role: "user", content: "Can you help me with my homework?" },
-    { role: "assistant", content: "Of course! What subject are you working on?" },
-    { role: "user", content: "I'm working on a math problem." },
-    { role: "assistant", content: "Great! What math problem are you trying to solve?" },
-    { role: "user", content: "I'm stuck on solving quadratic equations." },
-    { role: "assistant", content: "No problem. Here's a step-by-step guide to solving quadratic equations." },
-    { role: "user", content: "Thanks! That was really helpful." },
-    { role: "assistant", content: "You're welcome! Do you need help with anything else?" },
-    { role: "user", content: "No, that's all for now. Thanks again!" },
-    { role: "assistant", content: "You're welcome! Have a great day!" }
-];
-
+type Message = {
+    role: "user" | "assistant";
+    content: string;
+  };
 const Chat = () => {
     const inputRef = useRef<HTMLInputElement | null>(null);
     const auth = useAuth()
+    const [chatMessages, setChatMessages] = useState<Message[]>([]);
     const handleSubmit = async () => {
-        console.log(inputRef.current?.value);
-    }
+        const content = inputRef.current?.value as string;
+        if (inputRef && inputRef.current) {
+          inputRef.current.value = "";
+        }
+        const newMessage: Message = { role: "user", content };
+        setChatMessages((prev) => [...prev, newMessage]);
+        const chatData = await sendChatRequest(content);
+        setChatMessages([...chatData.chats]);
+        //
+      };
     return (<Box sx={{
         display: "flex",
         flex: 1,
@@ -121,7 +121,7 @@ const Chat = () => {
                 }}
             >
                 {chatMessages.map((chat, index) => (
-                    // @ts-expect-error: Explanation of why the error is being ignored
+                    
                     <ChatItem content={chat.content} role={chat.role} key={index} />
                 ))}
             </Box>
