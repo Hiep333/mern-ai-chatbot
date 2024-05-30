@@ -4,6 +4,7 @@ import {
   userSignUp,
   userLogin,
   verifyUser,
+  userLogout,
 } from "../controllers/user-controllers.js";
 import {
   validate,
@@ -18,5 +19,6 @@ userRoutes.get("/", getAllUsers);
 userRoutes.post("/signup", validate(signupValidator), userSignUp);
 userRoutes.post("/login", validate(loginValidator), userLogin);
 userRoutes.get("/auth-status", verifyToken, verifyUser);
+userRoutes.get("/logout", verifyToken, userLogout);
 
 export default userRoutes;
